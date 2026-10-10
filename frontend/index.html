@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zephyr</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/panels.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+    <div id="app">
+        <header id="topbar">
+            <span class="logo">Zephyr</span>
+            <div id="stats-bar"></div>
+            <input id="search" type="text" placeholder="Search callsign..." autocomplete="off" spellcheck="false">
+            <button id="weather-toggle" title="Toggle radar">🌧️</button>
+            <button id="theme-toggle" title="Toggle theme">☀️</button>
+        </header>
+
+        <div id="map"></div>
+
+        <aside id="flight-panel" class="hidden"></aside>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
