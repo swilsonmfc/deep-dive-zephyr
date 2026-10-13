@@ -1,0 +1,605 @@
+{
+  "_about": "Demo content for the Zephyr engagement in Artisyn. scripts/seed_demo.py replays it through the portal's REST API. Records refer to each other by their 'key'; the portal assigns the real ids. 'as' names the person (a key under people) who performs an action; it defaults to the person the portal requires for that kind of action.",
+
+  "engagement": {
+    "name": "Zephyr",
+    "slug": "zephyr",
+    "clientId": "client-zephyr",
+    "clientName": "Zephyr",
+    "phase": "build",
+    "cloudProvider": "aws",
+    "runtimeSlug": "artisyn-aws",
+    "commercialFrameworkSlug": "outcome-based",
+    "developerTooling": "claude-code",
+    "sizeBudgetUnit": "week"
+  },
+
+  "people": [
+    { "key": "steve", "firstName": "Steve", "lastName": "Wilson", "email": "steve.wilson@dataart.com", "title": "Engagement lead", "globalRoles": ["admin", "engagement-creator"] },
+    { "key": "priya", "firstName": "Priya", "lastName": "Nair", "email": "priya.nair@dataart.com", "title": "Product lead" },
+    { "key": "leo", "firstName": "Leo", "lastName": "Grant", "email": "leo.grant@dataart.com", "title": "Product designer" },
+    { "key": "ana", "firstName": "Ana", "lastName": "Sousa", "email": "ana.sousa@dataart.com", "title": "Frontend lead" },
+    { "key": "marcus", "firstName": "Marcus", "lastName": "Lee", "email": "marcus.lee@dataart.com", "title": "Frontend engineer" },
+    { "key": "tom", "firstName": "Tom", "lastName": "Becker", "email": "tom.becker@dataart.com", "title": "Data lead" },
+    { "key": "hana", "firstName": "Hana", "lastName": "Ito", "email": "hana.ito@dataart.com", "title": "Backend engineer" }
+  ],
+
+  "workspaces": [
+    {
+      "key": "ws-shaping",
+      "name": "Flight Experience",
+      "type": "shaping"
+    },
+    {
+      "key": "ws-web",
+      "name": "Zephyr Web",
+      "type": "delivery",
+      "manifestationKind": "git",
+      "manifestationRef": "github.com/potterpk/Zephyr",
+      "repositories": [{ "kind": "code", "backing": "git", "ref": "github.com/potterpk/Zephyr", "label": "Zephyr (frontend/)" }]
+    },
+    {
+      "key": "ws-data",
+      "name": "Zephyr Data",
+      "type": "delivery",
+      "manifestationKind": "git",
+      "manifestationRef": "github.com/potterpk/Zephyr",
+      "repositories": [{ "kind": "code", "backing": "git", "ref": "github.com/potterpk/Zephyr", "label": "Zephyr (backend/)" }]
+    }
+  ],
+
+  "teams": [
+    {
+      "key": "team-management",
+      "management": true,
+      "members": [
+        { "person": "priya", "role": "admin" },
+        { "person": "steve", "role": "admin" }
+      ]
+    },
+    {
+      "key": "team-experience",
+      "name": "Flight Experience",
+      "type": "shaping",
+      "workspace": "ws-shaping",
+      "members": [
+        { "person": "priya", "role": "admin" },
+        { "person": "leo", "role": "user" },
+        { "person": "steve", "role": "admin" }
+      ]
+    },
+    {
+      "key": "team-map",
+      "name": "Map Squad",
+      "type": "delivery",
+      "workspace": "ws-web",
+      "members": [
+        { "person": "ana", "role": "admin" },
+        { "person": "marcus", "role": "user" },
+        { "person": "steve", "role": "admin" }
+      ]
+    },
+    {
+      "key": "team-data",
+      "name": "Data Pipeline",
+      "type": "delivery",
+      "workspace": "ws-data",
+      "members": [
+        { "person": "tom", "role": "admin" },
+        { "person": "hana", "role": "user" }
+      ]
+    }
+  ],
+
+  "initiatives": [
+    {
+      "key": "init-live-map",
+      "name": "Reliable live map",
+      "ownerTeam": "team-experience",
+      "description": "Zephyr's promise is every flight in the air, worldwide, on one good-looking map. Today that promise breaks quietly: the free OpenSky quota runs out, tabs poll on their own, and an empty map looks like a broken app. This Initiative makes the live map trustworthy at public-beta traffic and beyond."
+    },
+    {
+      "key": "init-insight",
+      "name": "Flight insight",
+      "ownerTeam": "team-experience",
+      "description": "Clicking a plane should answer the questions people actually have: where is it going, what is it, and where has it been. This Initiative improves route and aircraft details and lets people follow the flights they care about."
+    }
+  ],
+
+  "tags": [
+    { "key": "tag-quota", "name": "Data quota", "lists": ["problems", "solutions"] },
+    { "key": "tag-map-ux", "name": "Map UX", "lists": ["problems", "solutions", "feedback"] },
+    { "key": "tag-accessibility", "name": "Accessibility", "lists": ["problems", "feedback"] },
+    { "key": "tag-beta", "name": "Public beta", "lists": ["feedback"] }
+  ],
+
+  "goals": [
+    {
+      "key": "g-weekly-users",
+      "title": "Reach 5,000 weekly active users by June 2027",
+      "description": "Zephyr only earns a hosted, always-on deployment if people come back to it. Every Initiative should move this number.\n\nMeasure: distinct weekly visitors to the hosted map (target: 5,000 by the end of June 2027; 640 today)."
+    },
+    {
+      "key": "g-fresh-map",
+      "initiative": "init-live-map",
+      "title": "Keep the map less than two minutes stale for 99% of sessions",
+      "description": "A flight tracker that shows ten-minute-old positions is worse than none. Staleness is measured from the newest OpenSky state vector to the moment it is drawn.\n\nMeasure: share of sessions whose median marker age stays under 120 seconds (target: 99%)."
+    },
+    {
+      "key": "g-quota-headroom",
+      "initiative": "init-live-map",
+      "title": "Stay inside the OpenSky quota at ten times today's traffic",
+      "description": "The authenticated OpenSky allowance is generous, but only if requests are shared. Growth must not translate into more upstream calls.\n\nMeasure: upstream requests per day at 10x the October 2026 user count (target: under 80% of the daily allowance)."
+    },
+    {
+      "key": "g-route-coverage",
+      "initiative": "init-insight",
+      "title": "Show a destination for nine in ten clicked flights",
+      "description": "'Where is it going?' is the first question anyone asks. adsbdb covers scheduled airline flights well and almost nothing else.\n\nMeasure: share of detail-panel opens that show a destination airport (target: 90%; 61% today)."
+    },
+    {
+      "key": "g-search",
+      "initiative": "init-insight",
+      "title": "Find any airborne flight in one search",
+      "description": "People type what is printed on their boarding pass or what a friend texted them, not an exact ICAO callsign.\n\nMeasure: searches that land on a flight without a second attempt (target: 85%).",
+      "close": { "outcome": "achieved", "reason": "Prefix and airline-code search reached 88% first-attempt success in the beta week of 28 September." }
+    }
+  ],
+
+  "milestones": [
+    {
+      "key": "m-beta",
+      "title": "Public beta on a shared server",
+      "description": "Zephyr runs as one hosted instance instead of on each person's laptop, with authenticated OpenSky access and honest empty states.",
+      "targetDate": "2026-09-25",
+      "close": { "outcome": "achieved", "reason": "Beta opened on 24 September to the waiting list of 400 people." }
+    },
+    {
+      "key": "m-mobile",
+      "title": "Mobile layout preview",
+      "description": "A phone-sized layout of the map and details panel, shared with the beta group for comment.",
+      "targetDate": "2026-09-30",
+      "close": { "outcome": "missed", "reason": "Design time went to the quota and empty-state work before beta. Moved to the first quarter of 2027." }
+    },
+    {
+      "key": "m-quota-safe",
+      "title": "Quota-safe at ten times beta traffic",
+      "description": "One shared upstream poll serves every client, so load tests at 10x beta traffic stay inside the OpenSky allowance.",
+      "targetDate": "2026-10-30"
+    },
+    {
+      "key": "m-follow",
+      "title": "Follow a flight release",
+      "description": "People can pin flights, see where they are going even off the airline network, and get told when they land.",
+      "targetDate": "2026-12-11"
+    }
+  ],
+
+  "problems": [
+    {
+      "key": "p-quota",
+      "initiative": "init-live-map",
+      "title": "Anonymous OpenSky quota runs out by mid-afternoon",
+      "description": "Without credentials OpenSky allows about 400 requests a day, per IP address. With one browser refreshing every 60 seconds, a single person exhausts it in under seven hours; with the beta group behind one server it runs out before lunch in Europe. After that the map is empty until midnight UTC.",
+      "goals": ["g-fresh-map", "g-quota-headroom"],
+      "tags": ["tag-quota"],
+      "section": "active"
+    },
+    {
+      "key": "p-blank-map",
+      "initiative": "init-live-map",
+      "title": "The map goes blank with no explanation once the quota is gone",
+      "description": "When OpenSky starts refusing requests the frontend simply draws no planes. Beta users read that as Zephyr being broken, not as a daily limit, and several reported it as an outage.",
+      "goals": ["g-fresh-map", "g-weekly-users"],
+      "tags": ["tag-map-ux"],
+      "section": "active"
+    },
+    {
+      "key": "p-tab-polling",
+      "initiative": "init-live-map",
+      "title": "Every open browser tab polls OpenSky on its own",
+      "description": "updater.js schedules its own 60-second fetch in each tab. Someone with three tabs open costs three times the quota for the same picture.",
+      "tags": ["tag-quota"],
+      "as": "hana",
+      "triage": true,
+      "merge": { "into": "p-quota", "reason": "Same root cause: polling is per client instead of shared. The shared cache Solution fixes both." }
+    },
+    {
+      "key": "p-coverage",
+      "initiative": "init-live-map",
+      "title": "Thin coverage over oceans and Africa reads as a bug",
+      "description": "ADS-B coverage depends on community receivers, so the North Atlantic, most of Africa and parts of Asia show few planes. Nothing on the map says so, and beta users assume flights are missing.",
+      "goals": ["g-weekly-users"],
+      "tags": ["tag-map-ux"],
+      "section": "backlog"
+    },
+    {
+      "key": "p-slow-refresh",
+      "initiative": "init-live-map",
+      "title": "The 60-second refresh freezes the map on older laptops",
+      "description": "Each refresh rebuilds about 9,000 DOM markers. On a 2019 laptop the map stops responding to panning for two to three seconds every minute.",
+      "goals": ["g-fresh-map"],
+      "tags": ["tag-map-ux"],
+      "section": "backlog"
+    },
+    {
+      "key": "p-radar-zoom",
+      "initiative": "init-live-map",
+      "title": "Radar tiles disappear past zoom level 7",
+      "description": "RainViewer serves precipitation tiles only up to a fixed zoom. Past it the overlay vanishes without a word, exactly when someone zooms in to check the weather at their own airport.",
+      "as": "leo",
+      "triage": true
+    },
+    {
+      "key": "p-approach-path",
+      "initiative": "init-live-map",
+      "title": "The predicted path ignores turns on approach",
+      "description": "The dashed prediction extends the current heading in a straight line, so on approach it points through terrain or straight past the runway.",
+      "as": "leo",
+      "triage": true,
+      "decline": "The prediction is a visual hint, not navigation. Modelling approach procedures is out of scope for Zephyr."
+    },
+    {
+      "key": "p-route-gaps",
+      "initiative": "init-insight",
+      "title": "Route lookup misses most regional and charter flights",
+      "description": "adsbdb resolves routes from published airline schedules. Regional carriers, charters, cargo and general aviation come back with no origin or destination, which is four in ten clicked planes in the beta logs.",
+      "goals": ["g-route-coverage"],
+      "section": "active"
+    },
+    {
+      "key": "p-follow",
+      "initiative": "init-insight",
+      "title": "People can't follow a flight they care about",
+      "description": "The most common beta request: 'I want to watch my partner's flight home.' Today that means keeping a tab open and searching the callsign again after every refresh.",
+      "goals": ["g-weekly-users"],
+      "section": "active"
+    },
+    {
+      "key": "p-exact-callsign",
+      "initiative": "init-insight",
+      "title": "Callsign search needs the exact ICAO callsign",
+      "description": "Search matches the full callsign only. 'EZY' or 'easyJet 8123' finds nothing, although the flight is on the map as EZY81BC.",
+      "goals": ["g-search"],
+      "section": "active",
+      "close": { "outcome": "resolved" }
+    },
+    {
+      "key": "p-history",
+      "initiative": "init-insight",
+      "title": "A flight's history is gone once it lands",
+      "description": "The amber flown path covers the last hour from OpenSky and disappears when the aircraft stops transmitting. People who check after landing see nothing.",
+      "section": "backlog"
+    },
+    {
+      "key": "p-spot-airline",
+      "initiative": "init-insight",
+      "title": "Can't pick out a launch airline's flights at a glance",
+      "description": "Our launch partner, JetBlue, wants its flights easy to spot for the beta campaign. Today a JetBlue callsign (JBU…) looks exactly like every other callsign in the details panel.",
+      "goals": ["g-weekly-users"],
+      "tags": ["tag-map-ux"],
+      "section": "active"
+    },
+    {
+      "key": "p-type-codes",
+      "initiative": "init-insight",
+      "title": "Aircraft types show ICAO codes nobody recognises",
+      "description": "The details panel shows 'A20N' and 'B38M'. Enthusiasts know them; everyone else wants 'Airbus A320neo'.",
+      "as": "leo",
+      "draft": true
+    }
+  ],
+
+  "solutions": [
+    {
+      "key": "s-jetblue-red",
+      "title": "Turn JetBlue callsigns red",
+      "description": "In the flight details panel, show the callsign in red when it belongs to JetBlue (ICAO prefix JBU), so JetBlue flights stand out. Other callsigns keep today's styling.\n\nWhere: frontend/js/panels.js renders the callsign into .panel-callsign; frontend/css/panels.css styles it.\n\nDone when: clicking any JBU flight shows a red callsign in light and dark mode, and no other callsign changes colour.",
+      "origin": "p-spot-airline",
+      "team": "team-map",
+      "priority": "high",
+      "milestone": "m-follow",
+      "goals": ["g-weekly-users"],
+      "tags": ["tag-map-ux"],
+      "budget": 1,
+      "committedDate": "2026-10-23",
+      "stage": "committed"
+    },
+    {
+      "key": "s-auth-client",
+      "title": "Authenticated OpenSky client with token refresh",
+      "description": "Move OpenSky calls to the OAuth client-credentials flow in services/opensky.py, refreshing the token before it expires, so the hosted instance gets the registered-account allowance.",
+      "origin": "p-quota",
+      "team": "team-data",
+      "priority": "high",
+      "milestone": "m-beta",
+      "goals": ["g-quota-headroom"],
+      "tags": ["tag-quota"],
+      "budget": 1,
+      "committedDate": "2026-09-18",
+      "stage": "delivered"
+    },
+    {
+      "key": "s-quota-banner",
+      "title": "Quota-exhausted banner with the next reset time",
+      "description": "When OpenSky refuses requests, keep the last known positions on screen, dim them, and show a banner that says the data is paused and when it resumes (midnight UTC).",
+      "origin": "p-blank-map",
+      "team": "team-map",
+      "priority": "high",
+      "milestone": "m-beta",
+      "tags": ["tag-map-ux"],
+      "budget": 1,
+      "committedDate": "2026-09-22",
+      "stage": "delivered"
+    },
+    {
+      "key": "s-fuzzy-search",
+      "title": "Prefix and airline-code search",
+      "description": "Match callsign prefixes and IATA airline codes (EZY, U2, easyJet) against the flights on the map, ranked by closeness, so a partial entry jumps to the right plane.",
+      "origin": "p-exact-callsign",
+      "team": "team-map",
+      "priority": "medium",
+      "milestone": "m-beta",
+      "goals": ["g-search"],
+      "budget": 1,
+      "committedDate": "2026-09-24",
+      "stage": "delivered"
+    },
+    {
+      "key": "s-shared-cache",
+      "title": "One shared upstream poll behind a server-side cache",
+      "description": "The backend polls OpenSky once per interval and serves every client from a cache, with ETags so unchanged responses cost nothing. Browser tabs read from Zephyr, never from OpenSky.",
+      "origin": "p-quota",
+      "problems": ["p-tab-polling"],
+      "team": "team-data",
+      "priority": "critical",
+      "milestone": "m-quota-safe",
+      "goals": ["g-quota-headroom", "g-fresh-map"],
+      "tags": ["tag-quota"],
+      "budget": 2,
+      "committedDate": "2026-10-28",
+      "stage": "committed"
+    },
+    {
+      "key": "s-fallback-routes",
+      "title": "Fallback route lookup from flight-plan data",
+      "description": "When adsbdb has no route, fall back to a second source keyed on registration, and cache answers for the day so repeated clicks are free.",
+      "origin": "p-route-gaps",
+      "team": "team-data",
+      "priority": "high",
+      "milestone": "m-follow",
+      "goals": ["g-route-coverage"],
+      "budget": 3,
+      "indicativeDate": "2026-11-27",
+      "stage": "accepted"
+    },
+    {
+      "key": "s-inferred-origin",
+      "title": "Infer the departure airport from the flown track",
+      "description": "Where no route source knows the flight, take the first point of its flown path and name the nearest airport as a likely origin, clearly marked as inferred.",
+      "origin": "p-route-gaps",
+      "team": "team-map",
+      "priority": "medium",
+      "goals": ["g-route-coverage"],
+      "stage": "shaped"
+    },
+    {
+      "key": "s-watchlist",
+      "title": "Watchlist: pin flights and get told when they land",
+      "description": "Pin any flight from its details panel. Pinned flights stay highlighted across refreshes, sit in a side list, and raise a browser notification on landing.",
+      "origin": "p-follow",
+      "team": "team-map",
+      "priority": "high",
+      "milestone": "m-follow",
+      "goals": ["g-weekly-users"],
+      "tags": ["tag-map-ux"],
+      "blockedBy": ["s-shared-cache"],
+      "stage": "shaped"
+    },
+    {
+      "key": "s-email-alerts",
+      "title": "Email alerts for watchlisted flights",
+      "description": "Send an email when a pinned flight departs or lands.",
+      "origin": "p-follow",
+      "team": "team-data",
+      "priority": "low",
+      "drop": "Browser notifications cover what beta users asked for, and email needs accounts Zephyr does not have."
+    },
+    {
+      "key": "s-canvas-markers",
+      "title": "Draw aircraft markers on a canvas layer",
+      "description": "Replace per-plane DOM markers with a single canvas layer, so a refresh repaints instead of rebuilding thousands of elements.",
+      "origin": "p-slow-refresh",
+      "team": "team-map",
+      "priority": "medium",
+      "tags": ["tag-map-ux"]
+    },
+    {
+      "key": "s-coverage-overlay",
+      "title": "Coverage overlay showing where receivers are thin",
+      "description": "An optional shaded layer, built from the density of state vectors over the past week, that shows where few receivers listen, with a one-line explanation.",
+      "origin": "p-coverage",
+      "priority": "low"
+    }
+  ],
+
+  "feedback": [
+    {
+      "key": "fb-blank-3pm",
+      "externalId": "ZEP-101",
+      "title": "Map went blank around 3pm UK time",
+      "description": "All the planes disappeared mid-afternoon and didn't come back until the next morning. Nothing on screen said why.",
+      "submittedBy": "Beta tester (London)",
+      "dateAdded": "2026-09-08",
+      "priority": "high",
+      "feedbackType": "bug",
+      "links": [{ "solution": "s-quota-banner" }],
+      "tags": ["tag-beta"],
+      "flow": "acknowledged",
+      "signOffDate": "2026-10-02"
+    },
+    {
+      "key": "fb-ezy-search",
+      "externalId": "ZEP-104",
+      "title": "Searching 'EZY' found nothing",
+      "description": "My flight was EZY8123 but the search box wants something else. I gave up and panned around instead.",
+      "submittedBy": "Beta tester (Bristol)",
+      "dateAdded": "2026-09-12",
+      "priority": "medium",
+      "feedbackType": "bug",
+      "links": [{ "solution": "s-fuzzy-search" }],
+      "tags": ["tag-beta"],
+      "flow": "ready_to_send"
+    },
+    {
+      "key": "fb-follow",
+      "externalId": "ZEP-110",
+      "title": "Would love to follow my partner's flight home",
+      "description": "Could I pin a flight so it stays highlighted and tells me when it lands?",
+      "submittedBy": "Beta tester (Lisbon)",
+      "dateAdded": "2026-09-30",
+      "priority": "medium",
+      "feedbackType": "enhancement",
+      "links": [{ "problem": "p-follow" }],
+      "tags": ["tag-beta"],
+      "flow": "in_progress"
+    },
+    {
+      "key": "fb-charter",
+      "externalId": "ZEP-118",
+      "title": "Charter flight shows no destination",
+      "description": "Clicked a TUI charter over the Alps and the route was empty.",
+      "submittedBy": "Beta tester (Munich)",
+      "dateAdded": "2026-10-06",
+      "priority": "medium",
+      "feedbackType": "bug",
+      "links": [{ "problem": "p-route-gaps" }],
+      "tags": ["tag-beta"],
+      "flow": "in_progress"
+    },
+    {
+      "key": "fb-atlantic",
+      "externalId": "ZEP-115",
+      "title": "Planes over the Atlantic are missing",
+      "description": "Lots of flights near Ireland, then almost nothing until Canada. Are you dropping data?",
+      "submittedBy": "Beta tester (Dublin)",
+      "dateAdded": "2026-10-03",
+      "priority": "low",
+      "feedbackType": "bug",
+      "flow": "proposed",
+      "proposal": { "outcome": "not_a_bug", "reason": "ADS-B needs a receiver in range and there are none mid-ocean. Tracked as a map explanation in 'Thin coverage over oceans and Africa reads as a bug'." }
+    },
+    {
+      "key": "fb-radar-zoom",
+      "externalId": "ZEP-121",
+      "title": "Radar overlay vanishes when I zoom into my town",
+      "description": "Rain layer works zoomed out, then disappears when I zoom in to my local airfield.",
+      "submittedBy": "Beta tester (Leeds)",
+      "dateAdded": "2026-10-09",
+      "priority": "low",
+      "feedbackType": "bug",
+      "tags": ["tag-beta", "tag-map-ux"],
+      "flow": "new"
+    },
+    {
+      "key": "fb-contrast",
+      "externalId": "ZEP-123",
+      "title": "Details panel text is hard to read in dark mode",
+      "description": "Grey on dark grey for altitude and speed. I had to switch to light mode to read it.",
+      "submittedBy": "Beta tester (Manchester)",
+      "dateAdded": "2026-10-10",
+      "priority": "medium",
+      "feedbackType": "bug",
+      "tags": ["tag-accessibility"],
+      "flow": "new"
+    }
+  ],
+
+  "comments": [
+    {
+      "on": { "solution": "s-shared-cache" },
+      "as": "tom",
+      "body": "Proposal: poll every 15 seconds upstream and let clients read every 30. That is 5,760 calls a day whatever the number of users.",
+      "replies": [
+        { "as": "priya", "body": "Works for the staleness goal. Can we keep 60 seconds as the default on battery-saver devices?" },
+        { "as": "hana", "body": "Yes, the interval is per client now; only the upstream poll is shared." }
+      ],
+      "resolve": "priya"
+    },
+    {
+      "on": { "solution": "s-watchlist" },
+      "as": "ana",
+      "body": "Notifications need the page open or a service worker. Do we accept 'page open' for the first release?",
+      "replies": [{ "as": "leo", "body": "Yes for December. A service worker can follow once there is an installable app." }]
+    },
+    {
+      "on": { "problem": "p-coverage" },
+      "as": "leo",
+      "body": "Beta interviews: four of six people thought planes were missing over the Atlantic. An explanation helps more than more data."
+    },
+    {
+      "on": { "milestone": "m-quota-safe" },
+      "as": "tom",
+      "body": "Load test at 10x beta traffic is booked for 26 October, two days before the committed date."
+    }
+  ],
+
+  "questions": [
+    {
+      "on": { "solution": "s-fallback-routes" },
+      "as": "tom",
+      "text": "Does the second route source's licence allow caching answers for 24 hours?",
+      "assignee": "priya"
+    },
+    {
+      "on": { "problem": "p-history" },
+      "as": "priya",
+      "text": "How far back do beta users want to look: the last flight, or the last day?",
+      "assignee": "leo"
+    },
+    {
+      "on": { "problem": "p-quota" },
+      "as": "tom",
+      "text": "Has the registered OpenSky account been approved for the hosted instance's IP?",
+      "assignee": "priya",
+      "resolve": true
+    }
+  ],
+
+  "tasks": [
+    {
+      "title": "Book the 10x load test against the shared cache",
+      "on": { "solution": "s-shared-cache" },
+      "assignee": "tom",
+      "priority": "high",
+      "dueDate": "2026-10-26"
+    },
+    {
+      "title": "Interview three beta users about following flights",
+      "on": { "problem": "p-follow" },
+      "assignee": "leo",
+      "priority": "medium",
+      "dueDate": "2026-10-16"
+    },
+    {
+      "title": "Check the licence of the fallback route source",
+      "on": { "solution": "s-fallback-routes" },
+      "assignee": "priya",
+      "priority": "high",
+      "dueDate": "2026-10-14"
+    },
+    {
+      "title": "Register the hosted instance with OpenSky",
+      "on": { "problem": "p-quota" },
+      "assignee": "tom",
+      "priority": "critical",
+      "status": "done"
+    },
+    {
+      "title": "Write the beta announcement for the waiting list",
+      "assignee": "priya",
+      "priority": "medium",
+      "status": "done"
+    }
+  ]
+}
