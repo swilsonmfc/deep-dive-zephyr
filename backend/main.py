@@ -12,6 +12,15 @@ async def lifespan(app: FastAPI):
     yield
 
 
+class NoCacheStaticFiles(StaticFiles):
+    """Frontend files: make the browser revalidate on every load so edits show up."""
+
+    def file_response(self, *args, **kwargs):
+        response = super().file_response(*args, **kwargs)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
+
+
 app = FastAPI(title="Zephyr", lifespan=lifespan)
 
 app.add_middleware(
@@ -23,4 +32,4 @@ app.add_middleware(
 
 app.include_router(router)
 
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/", NoCacheStaticFiles(directory="frontend", html=True), name="frontend")
