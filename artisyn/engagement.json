@@ -275,7 +275,7 @@
       "key": "p-spot-airline",
       "initiative": "init-insight",
       "title": "Can't pick out a launch airline's flights at a glance",
-      "description": "Our launch partner, JetBlue, wants its flights easy to spot for the beta campaign. Today a JetBlue callsign (JBU…) looks exactly like every other callsign in the details panel.",
+      "description": "Our launch partner, JetBlue, wants its flights easy to spot for the beta campaign. Today a JetBlue plane (callsign JBU…) is drawn in the same blue as every other plane on the map.",
       "goals": ["g-weekly-users"],
       "tags": ["tag-map-ux"],
       "section": "active"
@@ -294,7 +294,7 @@
     {
       "key": "s-jetblue-red",
       "title": "Turn JetBlue callsigns red",
-      "description": "In the flight details panel, show the callsign in red when it belongs to JetBlue (ICAO prefix JBU), so JetBlue flights stand out. Other callsigns keep today's styling.\n\nWhere: frontend/js/panels.js renders the callsign into .panel-callsign; frontend/css/panels.css styles it.\n\nDone when: clicking any JBU flight shows a red callsign in light and dark mode, and no other callsign changes colour.",
+      "description": "On the map, draw every plane whose callsign starts with JBU (JetBlue's ICAO prefix) in red, so JetBlue flights stand out. Every other plane keeps today's blue.\n\nWhere: frontend/js/markers.js builds the plane icon (an inline SVG with a fixed blue fill) and updates the markers on each refresh.\n\nDone when: every JBU* plane in view is drawn red in light and dark mode, it stays red across the 60-second refresh, and no other plane changes colour.",
       "origin": "p-spot-airline",
       "team": "team-map",
       "priority": "high",

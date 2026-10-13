@@ -12,7 +12,7 @@ This folder sets up **Zephyr** as an engagement in a local Artisyn portal, with 
 | **Feedback** | 7 beta-tester reports across triage, in progress, ready to send and closed |
 | Extras | tags, comment threads, Questions, Tasks |
 
-**The delivery item for the demo** is the planning package **"Turn JetBlue callsigns red"**. It's a *committed* Solution owned by Map Squad, in the **Zephyr Web** delivery workspace, which points at this repository. It describes a small, real change: in `frontend/js/panels.js` / `frontend/css/panels.css`, show `JBU…` callsigns in red.
+**The delivery item for the demo** is the planning package **"Turn JetBlue callsigns red"**. It's a *committed* Solution owned by Map Squad, in the **Zephyr Web** delivery workspace, which points at this repository. It describes a small, real change: in `frontend/js/markers.js`, draw planes whose callsign matches `JBU*` in red on the map.
 
 ## Files
 
